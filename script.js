@@ -19,7 +19,7 @@ const fetchPokemonData = () => {
         console.log('pokeapiURL: ', pokeapiURL);
         pokemons?.push(fetch(pokeapiURL).then(res => res.json()))
     }
-    Promise?.all(pokemons)
+    Promise.all(pokemons)
         .then(data => {
             const pokemonGenerations = data?.map(item => ({
                 frontImage: item.sprites['front_default'],
@@ -37,21 +37,33 @@ const fetchPokemonData = () => {
 }
 fetchPokemonData()
 
-pokemonSearch.addEventListener('input', (event) => {
-    const filter = pokeArr.filter(item => pokemon.name.includes(event.target.value.toLowerCase()));
-    clearPokemon()
-    createPokemonCards(filter);
-})
+// pokemonSearch.addEventListener('input', (event) => {
+//     // const filter = pokeArr.filter(item => item.name.includes(event.target.value.toLowerCase()));
+//     const filter = pokeArr.filter(item => item.name.toLowerCase().includes(event.target.value.toLowerCase()));
+
+//     clearPokemon()
+//     createPokemonCards(filter);
+// })
+if (pokemonSearch) {
+    pokemonSearch.addEventListener('input', (event) => {
+        const filter = pokeArr.filter(item => item.name.toLowerCase().includes(event.target.value.toLowerCase()));
+        clearPokemon();
+        createPokemonCards(filter);
+    });
+}
 
 function clearPokemon() {
-    let section = document.querySelector('#Pokemon');
+    let section = document.querySelector('#pokemon');
     section.innerHTML = ''
 }
 
 function createPokemonCards(data) {
     let currentPokemon = data;
+    // if (typesOfSearch) {
+    //     currentPokemon = data.filter(item => item.type.includes(typesOfSearch.toLowerCase()))
+    // }
     if (typesOfSearch) {
-        currentPokemon = data.filter(item => item.type.includes(typesOfSearch.toLowerCase()))
+        currentPokemon = data.filter(item => item.type.toLowerCase() === typesOfSearch.toLowerCase());
     }
     currentPokemon.forEach(pokemon => {
         createPokemonCard(pokemon)
